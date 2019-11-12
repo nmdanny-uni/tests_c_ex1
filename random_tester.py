@@ -17,19 +17,27 @@ EXECUTABLE_PATH = ""
 
 def find_executable():
     global EXECUTABLE_PATH
+    potential_paths = []
     if sys.platform == "win32":
         print("Tests can not be run under windows.", file=sys.stderr)
         sys.exit(-1)
     for root, dirs, files in os.walk(".."):
         if EXECUTABLE_NAME in files:
-            EXECUTABLE_PATH = os.path.abspath(os.path.join(root, EXECUTABLE_NAME))
-    if EXECUTABLE_PATH is not "":
-        print(f"Using executable at \"{EXECUTABLE_PATH}\"")
-    else:
+            potential_paths.append( os.path.abspath(os.path.join(root, EXECUTABLE_NAME)))
+
+    if len(potential_paths) == 0:
         print(f"Couldn't find an executable 'manageStudents'! Make sure you compiled your program & placed this test"
               f" file within your project's directory or 1 folder inside it.", file=sys.stderr)
         sys.exit(-1)
 
+    if len(potential_paths) > 1:
+        print(f"Multiple 'manageStudents' executables found, can't tell which one to use, you should delete one of them!\n"
+              f"Note that when building via CLion, the executable should appear at 'cmake_build_debug', \nwhereas when "
+              f"building via GCC, it would appear where you invoked the command(usually at the exercise root directory)")
+        sys.exit(-1)
+
+    EXECUTABLE_PATH = potential_paths[0]
+    print(f"Using executable at \"{EXECUTABLE_PATH}\"")
 
 find_executable()
 
