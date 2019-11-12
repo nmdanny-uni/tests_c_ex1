@@ -219,11 +219,11 @@ class TestValidInputs(unittest.TestCase):
         self.assertNotIn("\nERROR: ", result, "There shouldn't be any error when"
                                               " inputting valid students with CRLF newlines")
 
-    @given(st.lists(Student.valid_student(), min_size=1))
-    def test_can_stable_sort_grades(self, s: List[Student]):
-        # python's sorting is stable, thus it should emit students in the exact order as your mergesort
+    @given(st.lists(Student.valid_student(), min_size=1, unique_by=lambda s: s.grade))
+    def test_can_mergesort_grades(self, s: List[Student]):
         expected_sorted = sorted(s, key=lambda stud: stud.grade)
         expected_output = students_to_str(expected_sorted)
+
         result = run_test("merge", students_to_input(s))
         print("expected sort order: ")
         print(expected_output)
