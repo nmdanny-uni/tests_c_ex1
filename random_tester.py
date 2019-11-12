@@ -197,7 +197,7 @@ class TestValidInputs(unittest.TestCase):
     def test_can_find_the_best(self, s: List[Student]):
 
         result = run_test("best", students_to_input(s))
-        found_best_st = re.search("^best student info is: (.*)$", result, re.MULTILINE)
+        found_best_st = re.search("^best student info is: (.*)$\\n", result, re.MULTILINE)
         assert found_best_st is not None, "Your're not printing the best student properly"
         real_best = max(s, key=lambda stud: stud.grade/stud.age)
 
