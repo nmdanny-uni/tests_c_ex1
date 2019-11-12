@@ -229,7 +229,7 @@ class TestValidInputs(unittest.TestCase):
         print(expected_output)
         print("gotten: ")
         print(result)
-        self.assertIn(expected_output, result, "Students should appear (stable) sorted via grades in the output")
+        self.assertIn(expected_output, result, "Students should appear sorted via grades in the output")
         self.assertNotIn("ERROR: ", result, "Shouldn't error while inserting valid students")
 
     @given(st.lists(Student.valid_student(), min_size=1, unique_by=lambda s: s.name))
@@ -243,7 +243,7 @@ class TestValidInputs(unittest.TestCase):
         print(expected_output)
         print("gotten: ")
         print(result)
-        self.assertIn(expected_output, result, "Students should appear (stable) sorted via grades in the output")
+        self.assertIn(expected_output, result, "Students should appear sorted via names in the output")
         self.assertNotIn("ERROR: ", result, "Shouldn't error while inserting valid students")
 
 
