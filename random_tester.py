@@ -11,7 +11,6 @@ import re
 import os
 import sys
 
-
 EXECUTABLE_NAME = "manageStudents"
 EXECUTABLE_PATH = ""
 
@@ -21,6 +20,17 @@ def find_executable():
     if sys.platform == "win32":
         print("Tests can not be run under windows.", file=sys.stderr)
         sys.exit(-1)
+
+    if EXECUTABLE_PATH and os.path.isfile(EXECUTABLE_PATH):
+        print(f"Using the given manageStudents executable: {EXECUTABLE_PATH}")
+        return
+
+    if EXECUTABLE_PATH and not os.path.isfile(EXECUTABLE_PATH):
+        print(f"You've given an explicit manageStudents path '{EXECUTABLE_PATH}',\n"
+               "but the file doesn't exist!", file=sys.stderr)
+        sys.exit(-1)
+
+    print(f"Looking for executable, beginning with parent directory: {os.path.abspath('..')}")
     for root, dirs, files in os.walk(".."):
         if EXECUTABLE_NAME in files:
             potential_paths.append( os.path.abspath(os.path.join(root, EXECUTABLE_NAME)))
@@ -33,7 +43,10 @@ def find_executable():
     if len(potential_paths) > 1:
         print(f"Multiple 'manageStudents' executables found, can't tell which one to use, you should delete one of them!\n"
               f"Note that when building via CLion, the executable should appear at 'cmake_build_debug', \nwhereas when "
-              f"building via GCC, it would appear where you invoked the command(usually at the exercise root directory)")
+              f"building via GCC, it would appear where you invoked the command(usually at the exercise root directory)\n"
+              f"Possible executable paths: {potential_paths}\n\n"
+              f"Alternatively, explicitly set the path by modifiyng EXECUTABLE_PATH in the python file.",
+              file=sys.stderr)
         sys.exit(-1)
 
     EXECUTABLE_PATH = potential_paths[0]
